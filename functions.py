@@ -22,7 +22,14 @@ def addOne():
     pub=input("Publisher: ")
     gen=input("Genres (if more than one, separate by commas in the same line): ")
     try:
-        record={"Title":title, "Author":author,"Year":year,"MovieAdaptation":movieadp,"Publisher":pub,"genres":gen}
+        record={
+            "Title":title, 
+            "Author":author,
+            "Year":year,
+            "MovieAdaptation":movieadp,
+            "Publisher":pub,
+            "genres":gen
+        }
         collection.insert_one(record)
         book=collection.find_one(record)
     except errors.BSONError:
@@ -47,13 +54,66 @@ def showOne(book_id):
                 print("\nThe book you're looking for doesn't exist in the database :( )")
     return(False)
 
-#op 3
+#op 3 !!!!!!!!!!!
 def update_by_id(book_id):
+    try:
         _id=ObjectId(book_id)
-        new_doc={
-         
-        }
-        collection.find_one_and_update({{"id":_id}, new_doc})
+
+    except errors.InvalidId:
+        print("You entered an invalid ID")
+    else:
+        print("Enter the number of the field you want to modify:\n1. Title\n2. Author\n3. Year\n4. Movie adaptation?\n5. Publisher\n6. Genres")
+        old_data=collection.find_one({"_id":_id})
+        flag =True
+        while flag:
+            key=int(input("?: "))
+    
+            if(key==1):
+                value=input("Enter the new value: ")
+                updated_value={'$set':{"Title":value}}
+                flag=set_key(old_data,updated_value)
+            elif(key==2):
+                value=input("Enter the new value: ")
+                updated_value={'$set':{"Author":value}}
+                flag=set_key(old_data,updated_value)
+            elif(key==3):
+                value= int(input("Enter the new value: "))
+                updated_value={'$set':{"Year":value}}   
+                flag=set_key(old_data,updated_value)
+            elif(key==4):
+                value=input("Enter the new value: ")
+                updated_value={'$set':{"MovieAdaptation":value}}
+                flag=set_key(old_data,updated_value)
+            elif(key==5):
+                value=input("Enter the new value: ")
+                updated_value={'$set':{"Publisher":value}}
+                flag=set_key(old_data,updated_value)
+            elif(key==6):
+                value=input("Enter the new value: ")
+                updated_value={'$set':{"Genres":value}}
+                flag=set_key(old_data,updated_value)
+            else:
+                print("Invalid option!")
+                key = int(input("Please enter a valid option: ")) 
+
+            res=input("Do you want to update another field of this book? (y/n): ")
+            if(res=='n'):
+                print("Your updated book looks like this: \n")
+                pprint.pprint(collection.find_one({"_id":_id}),sort_dicts=False)
+                return(False)
+            elif(res=='y'):
+                update_by_id(book_id)
+#setting the updated value
+def set_key(old,new):
+    try:
+        collection.update_one(old,new)
+    except errors.BSONError:
+        print("Your data could not be updated")
+    else:
+        print("Data updated succesfully")
+
+    return (False)
+
 
 #op 4
 def delete_by_id(book_id):

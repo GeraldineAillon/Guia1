@@ -15,7 +15,8 @@ def menu():
             id=input("Enter the book id: ")
             state=showOne(id)
         elif option==3:
-            state=update_by_id()
+            id=input("Enter the book id: ")
+            state=update_by_id(id)
         elif option==4:
             id=input("Enter the book id: ")
             state=delete_by_id(id)

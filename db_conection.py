@@ -11,4 +11,6 @@ CONECCTION_STRING= f"mongodb+srv://{db_name}:{password}@bddnr.iq13spn.mongodb.ne
 
 client =MongoClient(CONECCTION_STRING) 
 
+main_db=client.guia1
 
+collection = main_db.books

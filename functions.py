@@ -54,7 +54,7 @@ def showOne(book_id):
                 print("\nThe book you're looking for doesn't exist in the database :( )")
     return(False)
 
-#op 3 !!!!!!!!!!!
+#op 3 
 def update_by_id(book_id):
     try:
         _id=ObjectId(book_id)
@@ -66,7 +66,7 @@ def update_by_id(book_id):
         old_data=collection.find_one({"_id":_id})
         flag =True
         while flag:
-            key=int(input("?: "))
+            key=int(input(": "))
     
             if(key==1):
                 value=input("Enter the new value: ")

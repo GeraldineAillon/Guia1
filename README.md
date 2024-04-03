@@ -5,10 +5,10 @@ actualización y borrado de los metadatos, asi como también permite mostrar tod
 
 #REQUERIMIENTOS
 
-> Python 3.12 o mayor
-> MongoDB Atlas
-> pymongo
-> dotenv
+-> Python 3.12 o mayor
+-> MongoDB Atlas
+-> pymongo
+-> dotenv
 
 #USO DEL PROGRAMA
 

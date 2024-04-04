@@ -2,6 +2,7 @@ from db_conection import client
 from bson.objectid import ObjectId
 from bson import errors
 import pprint 
+import datetime
 
 
 main_db=client.guia1
@@ -58,53 +59,89 @@ def showOne(book_id):
 def update_by_id(book_id):
     try:
         _id=ObjectId(book_id)
-
+        system_year=datetime.datetime.now().year
     except errors.InvalidId:
         print("You entered an invalid ID")
     else:
-        print("Enter the number of the field you want to modify:\n1. Title\n2. Author\n3. Year\n4. Movie adaptation?\n5. Publisher\n6. Genres")
-        old_data=collection.find_one({"_id":_id})
-        flag =True
-        while flag:
-            key=int(input(": "))
-    
-            if(key==1):
-                value=input("Enter the new value: ")
-                updated_value={'$set':{"Title":value}}
-                flag=set_key(old_data,updated_value)
-            elif(key==2):
-                value=input("Enter the new value: ")
-                updated_value={'$set':{"Author":value}}
-                flag=set_key(old_data,updated_value)
-            elif(key==3):
-                value= int(input("Enter the new value: "))
-                updated_value={'$set':{"Year":value}}   
-                flag=set_key(old_data,updated_value)
-            elif(key==4):
-                value=input("Enter the new value: ")
-                updated_value={'$set':{"MovieAdaptation":value}}
-                flag=set_key(old_data,updated_value)
-            elif(key==5):
-                value=input("Enter the new value: ")
-                updated_value={'$set':{"Publisher":value}}
-                flag=set_key(old_data,updated_value)
-            elif(key==6):
-                value=input("Enter the new value: ")
-                updated_value={'$set':{"Genres":value}}
-                flag=set_key(old_data,updated_value)
-            else:
-                print("Invalid option!")
-                key = int(input("Please enter a valid option: ")) 
+        print("This is the actual book:\n")
+        pprint.pprint(collection.find_one({"_id":_id}),sort_dicts=False)
+        print("\n1. Title\n2. Author\n3. Year\n4. Movie adaptation?\n5. Publisher\n6. Genres")
+        f=True
 
-            res=input("Do you want to update another field of this book? (y/n): ")
-            if(res=='n'):
-                print("Your updated book looks like this: \n")
-                pprint.pprint(collection.find_one({"_id":_id}),sort_dicts=False)
-                return(False)
-            elif(res=='y'):
-                update_by_id(book_id)
-#setting the updated value
-def set_key(old,new):
+        while f==True:
+            key=int(input("Enter the number of the field you want to modify: "))
+            if(not isinstance(key,int)):
+                print("Only enter the NUMBER of the option!")
+            else:
+                if(key==1):
+                    value=input("Enter the new value: ")
+                    collection.update_one({"_id":_id},{'$set':{"Title":value}})
+                    res=input("Do you want to update another field of this book? (y/n): ")
+                    if(res=="y"): continue
+                    else:break
+                elif(key==2):
+                    value=input("Enter the new value: ")
+                    collection.update_one({"_id":_id},{'$set':{"Author":value}})
+                    res=input("Do you want to update another field of this book? (y/n): ")
+                    if(res=="y"): continue
+                    else:break
+                elif(key==3):
+                    while True:
+                        print(system_year)
+                        value= int(input("Enter the new value: "))
+                        if(not isinstance(value,int) or value > system_year):
+                            print("¡¡Enter a vallid year!!")
+                            continue
+                        else: break
+                    collection.update_one({"_id":_id},{'$set':{"Year":value}})
+                    res=input("Do you want to update another field of this book? (y/n): ")
+                    if(res=="y"): continue
+                    else:break
+                elif(key==4):
+                    value=input("Enter the new value: ")
+                    collection.update_one({"_id":_id},{'$set':{"MovieAdaptation":value}})
+                    res=input("Do you want to update another field of this book? (y/n): ")
+                    if(res=="y"): continue
+                    else:break
+                elif(key==5):
+                    value=input("Enter the new value: ")
+                    collection.update_one({"_id":_id},{'$set':{"Publisher":value}})
+                    res=input("Do you want to update another field of this book? (y/n): ")
+                    if(res=="y"): continue
+                    else:break
+                elif(key==6):
+                    value=input("Enter the new value: ")
+                    collection.update_one({"_id":_id},{'$set':{"Genres":value}})
+                    res=input("Do you want to update another field of this book? (y/n): ")
+                    if(res=="y"): continue
+                    else:break
+                else:
+                    print("Invalid option!")
+                    key = int(input("Please enter a valid option: "))
+        print("Your updated book looks like this: \n")
+        pprint.pprint(collection.find_one({"_id":_id}),sort_dicts=False)
+        return(False)
+
+'''def corb(_id):
+    res=input("Do you want to update another field of this book? (y/n): ")
+    if(res=="n"):
+        print("Your updated book looks like this: \n")
+        pprint.pprint(collection.find_one({"_id":_id}),sort_dicts=False)
+        return(False)
+    elif(res=="y"):'''
+
+    
+'''def more_values(book_id):#setting 
+    res=input("Do you want to update another field of this book? (y/n): ")
+    if(res=='n'):
+    
+        print("Your updated book looks like this: \n")
+        pprint.pprint(collection.find_one({"_id":book_id}),sort_dicts=False)
+        return(False)
+    elif(res=='y'):
+        return(True)'''
+
+'''def set_key(old,new):
     try:
         collection.update_one(old,new)
     except errors.BSONError:
@@ -112,7 +149,7 @@ def set_key(old,new):
     else:
         print("Data updated succesfully")
 
-    return (False)
+    return (False)'''
 
 
 #op 4

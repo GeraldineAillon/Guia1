@@ -4,9 +4,9 @@ from pymongo import MongoClient
 
 load_dotenv(find_dotenv())
 
-string_conect = os.environ.get("MONGO_URI")
-print(string_conect)
-CONECCTION_STRING= f"{string_conect}"
+password = os.environ.get("MONGO_PWR")
+
+CONECCTION_STRING= f"mongodb+srv://bddnr1:{password}@bddnr.iq13spn.mongodb.net/?retryWrites=true&w=majority&appName=BDDNR"
 
 client =MongoClient(CONECCTION_STRING) 
 

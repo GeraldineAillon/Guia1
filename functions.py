@@ -4,21 +4,34 @@ from bson import errors
 import pprint 
 import datetime
 
-
+#Coneccion a la base de datos 
 main_db=client.guia1
 
+#Se asigna la coleccion con la que se va a trabajar
 collection = main_db.books
 
-
+#Obtenemos el año del sistema para evitar conflictos con las fechas
+system_year=datetime.datetime.now().year
 #------Functions--------#
 
-#op 1
+#op 1: La primera funcion es la query para añadir nuevos documentos, donde se preguntan
+#      los datos de acuerdo a el esquema establecido para la coleccion en la base de datos.
+
 def addOne():
-    print("\nAdding new book...\n")
+    print("Adding new book...\n")
     print("Type the book's details:\n")
     title=input("Title: ")
     author=input("Author: ")
-    year=int(input("Year: "))
+    #bucle para que no ingrese letras o años mayores al actual
+    while True:
+        try:
+            year= int(input("Year: "))
+            if( year > system_year):
+                print("¡¡Enter a vallid year!!") 
+            else: break   
+        except ValueError:
+            print("Enter the whole year in numbers please(e.g:1990)")
+
     movieadp=input("Movie Adaptation?: ")
     pub=input("Publisher: ")
     gen=input("Genres (if more than one, separate by commas in the same line): ")
@@ -47,19 +60,20 @@ def showOne(book_id):
         _id=ObjectId(book_id)
         book= collection.find_one({"_id":_id})
     except errors.InvalidId:
-        print("! ! ! ! ! ! ! ! !\nInvalid id format\n! ! ! ! ! ! ! ! !")
+        print("\n\t! ! ! ! ! ! ! ! !Invalid id format! ! ! ! ! ! ! ! !\n")
     else:
         if book:
+            print("\n")
             pprint.pprint(book,sort_dicts=False)
+            print("\n")
         else:
-                print("\nThe book you're looking for doesn't exist in the database :( )")
+                print("\nThe book you're looking for doesn't exist in the database :(\n")
     return(False)
 
 #op 3 
 def update_by_id(book_id):
     try:
         _id=ObjectId(book_id)
-        system_year=datetime.datetime.now().year
     except errors.InvalidId:
         print("You entered an invalid ID")
     else:
@@ -87,12 +101,13 @@ def update_by_id(book_id):
                     else:break
                 elif(key==3):
                     while True:
-                        print(system_year)
-                        value= int(input("Enter the new value: "))
-                        if(not isinstance(value,int) or value > system_year):
-                            print("¡¡Enter a vallid year!!")
-                            continue
-                        else: break
+                        try:
+                            value= int(input("Enter the new value: "))
+                            if( value > system_year):
+                                print("¡¡Enter a vallid year!!") 
+                            else: break   
+                        except ValueError:
+                            print("Enter the whole year in numbers please(e.g:1990)\n")
                     collection.update_one({"_id":_id},{'$set':{"Year":value}})
                     res=input("Do you want to update another field of this book? (y/n): ")
                     if(res=="y"): continue
@@ -122,36 +137,6 @@ def update_by_id(book_id):
         pprint.pprint(collection.find_one({"_id":_id}),sort_dicts=False)
         return(False)
 
-'''def corb(_id):
-    res=input("Do you want to update another field of this book? (y/n): ")
-    if(res=="n"):
-        print("Your updated book looks like this: \n")
-        pprint.pprint(collection.find_one({"_id":_id}),sort_dicts=False)
-        return(False)
-    elif(res=="y"):'''
-
-    
-'''def more_values(book_id):#setting 
-    res=input("Do you want to update another field of this book? (y/n): ")
-    if(res=='n'):
-    
-        print("Your updated book looks like this: \n")
-        pprint.pprint(collection.find_one({"_id":book_id}),sort_dicts=False)
-        return(False)
-    elif(res=='y'):
-        return(True)'''
-
-'''def set_key(old,new):
-    try:
-        collection.update_one(old,new)
-    except errors.BSONError:
-        print("Your data could not be updated")
-    else:
-        print("Data updated succesfully")
-
-    return (False)'''
-
-
 #op 4
 def delete_by_id(book_id):
     try:
@@ -171,6 +156,7 @@ def showAll():
     data_set = collection.find()
     for document in data_set:
         pprint.pprint(document,sort_dicts=False)
+        print("\n")
     
     return(False)
 

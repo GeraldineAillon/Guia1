@@ -19,7 +19,8 @@ system_year=datetime.datetime.now().year
 
 def addOne():
     print("Adding new book...\n")
-    print("Type the book's details:\n")
+    print("Type the book's details\n")
+
     title=input("Title: ")
     author=input("Author: ")
     #bucle para que no ingrese letras o años mayores al actual
@@ -42,7 +43,7 @@ def addOne():
             "Year":year,
             "MovieAdaptation":movieadp,
             "Publisher":pub,
-            "genres":gen
+            "Genres":gen
         }
         collection.insert_one(record)
         book=collection.find_one(record)
@@ -54,21 +55,29 @@ def addOne():
 
     return(False)
 
-#op 2: Muestra un solo libro por
-#titulo
+#op 2: Mostrar libros segun algun parametro
+
+#por titulo: busca e imprime el o los libros que concuerden con el titulo, ya sea por una palabra o el titulo completo
+# Si el titulo del libro no está, pregunta si se desea agregar, dando opcion a insertar inmediatamente
+
 def showOnebyTitle(book_name):
     query={"Title": {"$regex": book_name,"$options": "i"}}
-    book=collection.find(query)
-    if(book):
+    count = collection.count_documents(query)
+    
+    if (count > 0):
+        book=collection.find(query)
         for aux in book:
+            print("\n")
             pprint.pprint(aux, sort_dicts=False)
     else:
-        print("The book you're lookign for doesn't exist in the database")
-        ad=input(" Would you like to add it?(y/n): ")
-        if(ad=="y"): addOne()
+        print("The book you're looking for doesn't exist in the database\n")
+        ad=input("Would you like to add it?(y/n): ")
+        if(ad=="y"):
+            print("\n") 
+            addOne()
     return(False)
 
-#id
+#Por id: busca un solo libro en especifico por la id unica del documento
 def showOneById(book_id):
     try:
         _id=ObjectId(book_id)
@@ -84,7 +93,7 @@ def showOneById(book_id):
                 print("\nThe book you're looking for doesn't exist in the database :(\n")
     return(False)
 
-#autor
+#por autor: busca y muestra todos los libros de un autor
 def showOnebyAuthor(author):
     query={"Author": {"$regex": author,"$options": "i"}}
     books=collection.find(query)
@@ -95,19 +104,33 @@ def showOnebyAuthor(author):
         print("The author you're lookign for doesn't exist in the database")
     return(False)
 
-#op 3 
+#por genero: busca y muestra todos los libros que tengan algun genero en comun
+def showByGenre(genre):
+    query={"Genres": {"$regex":genre, "$options":"i"}}
+    books=collection.find(query)
+    if(books):
+        for aux in books:
+            print("\n")
+            pprint.pprint(aux, sort_dicts=False)
+    else:
+        print("No book matches with that genre")
+    return(False)
+
+#op 3 actualiza los datos del documento solicitando la _id correspondiente. Se hace manejo de errores en caso
+# de problemas con el _id
+
 def update_by_id(book_id):
     try:
         _id=ObjectId(book_id)
     except errors.InvalidId:
-        print("You entered an invalid ID")
+        print("\nYou entered an invalid ID")
+        return(False)
     else:
         print("This is the actual book:\n")
         pprint.pprint(collection.find_one({"_id":_id}),sort_dicts=False)
         print("\n1. Title\n2. Author\n3. Year\n4. Movie adaptation?\n5. Publisher\n6. Genres")
-        f=True
 
-        while f==True:
+        while True:
             key=int(input("Enter the number of the field you want to modify: "))
             if(not isinstance(key,int)):
                 print("Only enter the NUMBER of the option!")
@@ -127,7 +150,7 @@ def update_by_id(book_id):
                 elif(key==3):
                     while True:
                         try:
-                            value= int(input("Enter the new value: "))
+                            value= int(input("New year: "))
                             if( value > system_year):
                                 print("¡¡Enter a vallid year!!") 
                             else: break   
@@ -169,15 +192,10 @@ def delete_by_id(book_id):
         _id=ObjectId(book_id)
         aux=collection.delete_one({"_id":_id})
     except errors.InvalidId:
-        print("! ! ! ! ! ! ! ! !Invalid id format! ! ! ! ! ! ! ! !\nnothing was deleted\n")
-    else:
-        if(aux):
-            print("\nDocument deleted succesfully")
-        else:
-             print("\nThe docuement could not be deleted")
+        print("\nThe document doesn't exist or couldn't be deleted\nNothing was deleted\n")
     return(False)
 
-#op 5
+#op 5: Muestra toda la coleccion en la base de datos
 def showAll():
     data_set = collection.find()
     for document in data_set:

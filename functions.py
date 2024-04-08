@@ -83,7 +83,7 @@ def showOneById(book_id):
         _id=ObjectId(book_id)
         book= collection.find_one({"_id":_id})
     except errors.InvalidId:
-        print("\n\t! ! ! ! ! ! ! ! !\tInvalid id format\t! ! ! ! ! ! ! ! !\n")
+        print("\n\t! ! ! ! ! ! ! ! !\tInvalid id format\n")
     else:
         if book:
             print("\n")
@@ -96,8 +96,9 @@ def showOneById(book_id):
 #por autor: busca y muestra todos los libros de un autor
 def showOnebyAuthor(author):
     query={"Author": {"$regex": author,"$options": "i"}}
-    books=collection.find(query)
-    if(books):
+    count = collection.count_documents(query)
+    if(count>0):
+        books=collection.find(query)
         for aux in books:
             pprint.pprint(aux, sort_dicts=False)
     else:
@@ -107,8 +108,9 @@ def showOnebyAuthor(author):
 #por genero: busca y muestra todos los libros que tengan algun genero en comun
 def showByGenre(genre):
     query={"Genres": {"$regex":genre, "$options":"i"}}
-    books=collection.find(query)
-    if(books):
+    count = collection.count_documents(query)
+    if(count>0):
+        books=collection.find(query)
         for aux in books:
             print("\n")
             pprint.pprint(aux, sort_dicts=False)
@@ -136,13 +138,13 @@ def update_by_id(book_id):
                 print("Only enter the NUMBER of the option!")
             else:
                 if(key==1):
-                    value=input("Enter the new value: ")
+                    value=input("Enter the new title: ")
                     collection.update_one({"_id":_id},{'$set':{"Title":value}})
                     res=input("Do you want to update another field of this book? (y/n): ")
                     if(res=="y"): continue
                     else:break
                 elif(key==2):
-                    value=input("Enter the new value: ")
+                    value=input("Enter the new author: ")
                     collection.update_one({"_id":_id},{'$set':{"Author":value}})
                     res=input("Do you want to update another field of this book? (y/n): ")
                     if(res=="y"): continue
@@ -150,7 +152,7 @@ def update_by_id(book_id):
                 elif(key==3):
                     while True:
                         try:
-                            value= int(input("New year: "))
+                            value= int(input("Enter the new year: "))
                             if( value > system_year):
                                 print("¡¡Enter a vallid year!!") 
                             else: break   
@@ -167,13 +169,13 @@ def update_by_id(book_id):
                     if(res=="y"): continue
                     else:break
                 elif(key==5):
-                    value=input("Enter the new value: ")
+                    value=input("Enter the new publisher: ")
                     collection.update_one({"_id":_id},{'$set':{"Publisher":value}})
                     res=input("Do you want to update another field of this book? (y/n): ")
                     if(res=="y"): continue
                     else:break
                 elif(key==6):
-                    value=input("Enter the new value: ")
+                    value=input("Enter the updated genre(s): ")
                     collection.update_one({"_id":_id},{'$set':{"Genres":value}})
                     res=input("Do you want to update another field of this book? (y/n): ")
                     if(res=="y"): continue
@@ -193,6 +195,9 @@ def delete_by_id(book_id):
         aux=collection.delete_one({"_id":_id})
     except errors.InvalidId:
         print("\nThe document doesn't exist or couldn't be deleted\nNothing was deleted\n")
+    else:
+        if aux:
+            print("Book deleted successfully")
     return(False)
 
 #op 5: Muestra toda la coleccion en la base de datos

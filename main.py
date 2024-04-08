@@ -1,9 +1,10 @@
 from functions import showAll,delete_by_id,showOneById,update_by_id,addOne,showOnebyTitle,showOnebyAuthor, showByGenre
 
-#Menu
 
-print("\nThis is a book directory, you can search for a specific book, add new books,\ndelete existing ones,update them and see all the books available.\n")
+#Se imprime este mensaje la primera vez que se ejecute el programa
+print("\nThis is a book directory, you can search for a specific book, author or genre, add new books,\ndelete existing ones,update them and see all the books available.\n")
 
+#Menu principal
 def menu():
     print("\n/*/ MAIN MENU /*/\n")
     print("1: Add new book\n2: Search\n3: Edit book\n4: Delete book\n5: Show all books\n6: Quit\n")
@@ -11,12 +12,13 @@ def menu():
                 try:
                         option= int(input("Type the number of the option you want: "))
                         break
+#se valida que el usuario no ingrese letras ni numeros que no esten en la lista.
+#tambien se considera cualquier interrucion por teclado, por ejemplo ctrl+c
                 except ValueError:
                         print("Invalid character, please enter a number")
                 except KeyboardInterrupt:
                        print("\nClosing program")
-                       exit()
-                
+                       exit()  
     state=True
     while state==True:
         if(option==1):
@@ -27,7 +29,8 @@ def menu():
                 while True:
                         try:
                                 opt=int(input("?: "))
-                                
+#se valida que el usuario no ingrese letras ni numeros que no esten en la lista.
+#tambien se considera cualquier interrucion por teclado, por ejemplo ctrl+c
                         except ValueError:
                                 print("!!!\t Just type the number of the option please")
                         except KeyboardInterrupt:

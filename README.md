@@ -145,7 +145,7 @@ El esquema de la coleccion en la base de datos es como se muestra a continuació
 
 →El campo _"Publisher"_ es una cadena de caractéres que indica cual fue la editorial o editor en publicar la primera edicion del libro
 
-→El campo _"Genres"_ es una cadena de caractéres que indica cuales son los generos literarios con los cuales se asocia un libro
+→El campo _"Genres"_ es una cadena de caractéres que indica cuales son los generos con los cuales se asocia un libro
 
 
 

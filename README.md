@@ -26,13 +26,28 @@ Primeramente hay que crear un entorno virtual en la carpeta donde se guardará e
 
     > En windows:
     py -m venv <nombre del entorno>
-**Para mayor información sobre como crear un entorno virtual revisar [este post](https://openwebinars.net/blog/entornos-de-desarrollo-virtuales-con-python3/)**
+
+Posterior a esto debemos activar el entorno virtual dentro de la carpeta donde se creó con el comando:
+
+    >En linux
+    source [nombre del entorno]/bin/activate
+
+    >En windows
+    py -m source [nombre del entorno]/bin/activate
+
+    o bien...
+    python -m source [nombre del entorno]/bin/activate
+
+### **Para mayor información sobre como crear un entorno virtual revisar [este post](https://openwebinars.net/blog/entornos-de-desarrollo-virtuales-con-python3/)**
     
 
 Luego se deben instalar las dependencias del proyecto: **_pymongo_** y **_python-dotenv_**
 
     > En Windows con el comando 
     py -m pip install [nombre libreria]
+
+    o bien...
+    python -m pip install [nombre libreria]
 
     > En linux con el comando 
     pip install [nombre libreria]

@@ -25,7 +25,7 @@ def menu():
                 print("\n")
                 state=addOne()
         elif option==2:
-                print("\n1. Search by ID\n2. Search by tittle\n3. Search by author\n4. Search by genre\n5. Return to main menu")
+                print("\n1. Search by ID\n2. Search by title\n3. Search by author\n4. Search by genre\n5. Return to main menu")
                 while True:
                         try:
                                 opt=int(input("?: "))

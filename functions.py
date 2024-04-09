@@ -163,7 +163,7 @@ def update_by_id(book_id):
                     if(res=="y"): continue
                     else:break
                 elif(key==4):
-                    value=input("Enter the new value: ")
+                    value=input("Enter the new value(yes/no): ")
                     collection.update_one({"_id":_id},{'$set':{"MovieAdaptation":value}})
                     res=input("Do you want to update another field of this book? (y/n): ")
                     if(res=="y"): continue
